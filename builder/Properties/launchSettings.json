@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "builder": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../"
+    }
+  }
+}

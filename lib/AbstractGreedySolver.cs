@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,27 +6,17 @@ namespace bot
     public abstract class AbstractGreedySolver<TGameState, TMove> : ISolver<TGameState, SingleMoveSolution<TMove>>
     {
         private readonly IEstimator<TGameState> estimator;
-        private readonly int numberOfBestMovesToLog;
 
-        protected AbstractGreedySolver(IEstimator<TGameState> estimator, int numberOfBestMovesToLog = 0)
+        protected AbstractGreedySolver(IEstimator<TGameState> estimator)
         {
             this.estimator = estimator;
-            this.numberOfBestMovesToLog = numberOfBestMovesToLog;
         }
 
         public IEnumerable<SingleMoveSolution<TMove>> GetSolutions(TGameState problem, Countdown countdown)
         {
             var moves = GetMoves(problem)
                 .Select(m => CreateGreedySolution(problem, m, countdown))
-                .OrderBy(s => s.Score)
-                .ToList();
-            if (numberOfBestMovesToLog > 0)
-            {
-                var text = moves.Cast<SingleMoveSolution<TMove>>()
-                    .Reverse().Take(numberOfBestMovesToLog).StrJoin("\n");
-                Console.Error.WriteLine(text);
-            }
-
+                .OrderBy(s => s.Score);
             return moves;
         }
 

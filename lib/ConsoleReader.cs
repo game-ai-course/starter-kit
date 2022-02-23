@@ -22,7 +22,7 @@ namespace bot
 
         public long ReadLong()
         {
-            return ReadLine().ToInt();
+            return ReadLine().ToLong();
         }
         
         public int[] ReadNums()

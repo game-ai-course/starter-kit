@@ -255,6 +255,11 @@ namespace bot
             return int.Parse(s);
         }
 
+        public static long ToLong(this string s)
+        {
+            return long.Parse(s);
+        }
+
         public static string StrJoin<T>(this IEnumerable<T> items, string delimiter)
         {
             return string.Join(delimiter, items);

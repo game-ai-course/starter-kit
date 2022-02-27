@@ -4,20 +4,20 @@ using System.Linq;
 
 namespace bot
 {
-    public class HillClimbing<TProblem, TSolution> : ISolver<TProblem, TSolution>
+    public class HillClimbingSolver<TProblem, TSolution> : ISolver<TProblem, TSolution>
         where TSolution : class, ISolution 
     {
-        public readonly StatValue ImprovementsCount = StatValue.CreateEmpty();
-        public readonly StatValue SimulationsCount = StatValue.CreateEmpty();
-        public readonly StatValue BestSolutionTimeMs = StatValue.CreateEmpty();
+        public readonly StatValue ImprovementsCount = StatValue.CreateEmpty("Improvements");
+        public readonly StatValue SimulationsCount = StatValue.CreateEmpty("Simulations");
+        public readonly StatValue TimeToFindBestMs = StatValue.CreateEmpty("TimeOfBestMs");
 
-        public string GetDebugStats()
+        public override string ToString()
         {
             return new[]
             {
-                $"sims: {SimulationsCount.ToDetailedString()}",
-                $"imps: {ImprovementsCount.ToDetailedString()}",
-                $"time: {BestSolutionTimeMs.ToDetailedString()}"
+                SimulationsCount,
+                ImprovementsCount,
+                TimeToFindBestMs
             }.StrJoin("\n");
         }
         
@@ -25,7 +25,7 @@ namespace bot
         protected readonly IMutator<TProblem, TSolution> Mutator;
         private readonly double baseSolverTimeFraction;
 
-        public HillClimbing(
+        public HillClimbingSolver(
             ISolver<TProblem, TSolution> baseSolver, 
             IMutator<TProblem, TSolution> mutator,
             double baseSolverTimeFraction = 0.1)
@@ -35,10 +35,7 @@ namespace bot
             this.baseSolverTimeFraction = baseSolverTimeFraction;
         }
 
-        public override string ToString()
-        {
-            return $"HC_({Mutator})_({baseSolver})_{baseSolverTimeFraction:#%}";
-        }
+        public string ShortName => $"HC_({Mutator})_({baseSolver})_{baseSolverTimeFraction:#%}";
 
         [SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
         public IEnumerable<TSolution> GetSolutions(TProblem problem, Countdown countdown)
@@ -61,7 +58,7 @@ namespace bot
             SimulationsCount.Add(mutationsCount);
             ImprovementsCount.Add(improvementsCount);
             if (steps.Count > 0)
-                BestSolutionTimeMs.Add(steps.Last().DebugInfo.Time.TotalMilliseconds);
+                TimeToFindBestMs.Add(steps.Last().DebugInfo.Time.TotalMilliseconds);
             return steps;
         }
 

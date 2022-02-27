@@ -7,26 +7,23 @@ namespace bot
 {
     public abstract class AbstractMonteCarloSolver<TProblem, TSolution> : ISolver<TProblem, TSolution> where TSolution : ISolution
     {
-        public readonly StatValue ImprovementsCount = StatValue.CreateEmpty();
-        public readonly StatValue SimulationsCount = StatValue.CreateEmpty();
-        public readonly StatValue BestSolutionTimeMs = StatValue.CreateEmpty();
-
-        public string GetDebugStats()
-        {
-            return new[]
-            {
-                $"sims: {SimulationsCount.ToDetailedString()}",
-                $"imps: {ImprovementsCount.ToDetailedString()}",
-                $"time: {BestSolutionTimeMs.ToDetailedString()}"
-            }.StrJoin("\n");
-        }
-
-        protected abstract TSolution GenerateRandomSolution(TProblem problem);
+        public readonly StatValue ImprovementsCount = StatValue.CreateEmpty("Improvements");
+        public readonly StatValue SimulationsCount = StatValue.CreateEmpty("Simulations");
+        public readonly StatValue TimeToFindBestMs = StatValue.CreateEmpty("TimeOfBestMs");
 
         public override string ToString()
         {
-            return "MC";
+            return new[]
+            {
+                SimulationsCount,
+                ImprovementsCount,
+                TimeToFindBestMs
+            }.StrJoin("\n");
         }
+
+        public string ShortName => "MC";
+
+        protected abstract TSolution GenerateRandomSolution(TProblem problem);
 
         public IEnumerable<TSolution> GetSolutions(TProblem problem, Countdown countdown)
         {
@@ -50,7 +47,7 @@ namespace bot
             SimulationsCount.Add(simCount);
             ImprovementsCount.Add(improvementsCount);
             if (steps.Count > 0)
-                BestSolutionTimeMs.Add(steps.Last().DebugInfo.Time.TotalMilliseconds);
+                TimeToFindBestMs.Add(steps.Last().DebugInfo.Time.TotalMilliseconds);
             return steps;
         }
     }

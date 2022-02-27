@@ -12,6 +12,7 @@ namespace bot
         ///     может быть полезно при отладке и исследовании алгоритма.
         /// </returns>
         IEnumerable<TSolution> GetSolutions(TProblem problem, Countdown countdown);
+        string ShortName { get; }
     }
 
     public interface ISolution

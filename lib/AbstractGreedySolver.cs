@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,17 +7,27 @@ namespace bot
     public abstract class AbstractGreedySolver<TGameState, TMove> : ISolver<TGameState, SingleMoveSolution<TMove>>
     {
         private readonly IEstimator<TGameState> estimator;
+        private readonly Random random;
 
-        protected AbstractGreedySolver(IEstimator<TGameState> estimator)
+        /// <summary>
+        /// Решения с одинаковой оценкой выводит в случайном порядке, для чего специально их перемешивает с помощью random.
+        /// Можно передавать random с зафиксированным seed, чтобы получить воспроизводимые результаты. 
+        /// </summary>
+        protected AbstractGreedySolver(IEstimator<TGameState> estimator, Random random)
         {
             this.estimator = estimator;
+            this.random = random;
         }
+
+        public string ShortName => $"G-{estimator}";
 
         public IEnumerable<SingleMoveSolution<TMove>> GetSolutions(TGameState problem, Countdown countdown)
         {
             var moves = GetMoves(problem)
                 .Select(m => CreateGreedySolution(problem, m, countdown))
-                .OrderBy(s => s.Score);
+                .Shuffle(random) // randomization!
+                .OrderBy(s => s.Score)
+                .ToList();
             return moves;
         }
 
@@ -28,11 +39,6 @@ namespace bot
             {
                 DebugInfo = new SolutionDebugInfo(countdown, 0, 0, ToString())
             };
-        }
-
-        public override string ToString()
-        {
-            return $"G-{estimator}";
         }
 
         protected abstract TGameState ApplyMove(TGameState problem, TMove move);

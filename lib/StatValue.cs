@@ -5,19 +5,23 @@ namespace bot
 {
     public class StatValue
     {
-        public static StatValue CreateEmpty() => new StatValue();
+        public static StatValue CreateEmpty(string name = null) => new StatValue(name);
         
-        private StatValue()
+        private StatValue(string name)
         {
+            Name = name;
         }
+        
+        public string Name { get; }
 
-        public StatValue(long count, double sum, double sum2, double min, double max)
+        public StatValue(long count, double sum, double sum2, double min, double max, string name)
         {
             Count = count;
             Sum = sum;
             Sum2 = sum2;
             Min = min;
             Max = max;
+            Name = name;
         }
 
         public long Count { get; private set; }
@@ -65,15 +69,19 @@ namespace bot
             Max = Math.Max(Max, value.Max);
         }
 
+        private string NamePrefix() =>
+            Name == null ? "" : $"{Name}: ";
+        
         public override string ToString()
         {
-            return $"{Mean.ToCompactString()} sigma={StdDeviation.ToCompactString()}";
+            return ToString(true);
         }
 
-        public string ToDetailedString(bool humanReadable = true)
+        public string ToString(bool humanReadable)
         {
             if (humanReadable)
-                return $"{Mean.ToCompactString()} " +
+                return NamePrefix() + 
+                       $"{Mean.ToCompactString()} " +
                        $"stdd={StdDeviation.ToCompactString()} " +
                        $"min..max={Min.ToCompactString()}..{Max.ToCompactString()} " +
                        $"confInt={ConfIntervalSize2Sigma.ToCompactString()} " +
@@ -84,7 +92,7 @@ namespace bot
 
         public StatValue Clone()
         {
-            return new StatValue(Count, Sum, Sum2, Min, Max);
+            return new StatValue(Count, Sum, Sum2, Min, Max, Name);
         }
     }
 }

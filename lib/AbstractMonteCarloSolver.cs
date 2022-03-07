@@ -39,7 +39,7 @@ namespace bot
                 {
                     improvementsCount++;
                     bestScore = solution.Score;
-                    solution.DebugInfo = new SolutionDebugInfo(countdown, simCount, improvementsCount, ToString());
+                    solution.DebugInfo = new SolutionDebugInfo(countdown, simCount, improvementsCount, ShortName);
                     steps.Add(solution);
                 }
             }

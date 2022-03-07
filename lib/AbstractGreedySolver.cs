@@ -37,7 +37,7 @@ namespace bot
             var score = -estimator.GetScore(clone);
             return new SingleMoveSolution<TMove>(move, score)
             {
-                DebugInfo = new SolutionDebugInfo(countdown, 0, 0, ToString())
+                DebugInfo = new SolutionDebugInfo(countdown, 0, 0, ShortName)
             };
         }
 

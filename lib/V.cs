@@ -176,5 +176,37 @@ namespace bot
         {
             return X >= 0 && X < width && Y >= 0 && Y < height;
         }
+        
+        public IEnumerable<V> Area9()
+        {
+            for (int dx = -1; dx <= 1; dx++)
+            for (int dy = -1; dy <= 1; dy++)
+                yield return new V(X + dx, Y + dy);
+        }
+
+        public IEnumerable<V> Area8()
+        {
+            for (int dx = -1; dx <= 1; dx++)
+            for (int dy = -1; dy <= 1; dy++)
+                if (dx != 0 || dy != 0)
+                    yield return new V(X + dx, Y + dy);
+        }
+
+        public IEnumerable<V> Area4()
+        {
+            yield return new V(X - 1, Y);
+            yield return new V(X + 1, Y);
+            yield return new V(X, Y - 1);
+            yield return new V(X, Y + 1);
+        }
+
+        public IEnumerable<V> Area5()
+        {
+            yield return this;
+            yield return new V(X - 1, Y);
+            yield return new V(X + 1, Y);
+            yield return new V(X, Y - 1);
+            yield return new V(X, Y + 1);
+        }
     }
 }

@@ -4,9 +4,7 @@
     {
         public BotCommand GetCommand(State state, Countdown countdown)
         {
-            // ISolver<State, SingleMoveSolution<BotCommand>> solver = null;
-            // solver = solver.WithLogging(5);
-            return new BotCommand();
+            return new Move(V.Zero) { Message = "Nothing to do..." };
         }
     }
 }   

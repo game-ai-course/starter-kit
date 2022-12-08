@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <StartupObject>bot.App</StartupObject>
-    <LangVersion>8</LangVersion>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

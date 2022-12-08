@@ -1,31 +1,52 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace bot
 {
-    public abstract class BotCommand
+    public record BotCommand
     {
-        public abstract override string ToString();
-    }
+        private static readonly Dictionary<string, Func<object, object>[]> ParamGetters = new();
 
-    public class BotCommand<TSelf> : BotCommand where TSelf : BotCommand<TSelf>
-    {
-        private static readonly FieldInfo[] Fields = typeof(TSelf).GetFields(BindingFlags.Instance | BindingFlags.Public);
-        private static readonly FieldInfo[] Args = typeof(TSelf)
-            .GetConstructors().Single().GetParameters()
-            .Select(p => Fields.Single(f => f.Name.Equals(p.Name, StringComparison.OrdinalIgnoreCase)))
-            .ToArray();
+        private Func<object, object> ParamGetter(ParameterInfo p)
+        {
+            var fields = GetType().GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var field = fields.SingleOrDefault(f => f.Name.Equals(p.Name, StringComparison.OrdinalIgnoreCase));
+            if (field != null)
+                return o => field.GetValue(o);
+            var properties = GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            var property = properties.SingleOrDefault(f => f.Name.Equals(p.Name, StringComparison.OrdinalIgnoreCase));
+            if (property != null)
+                return o => property.GetValue(o);
+            return null;
+        }
 
         public string Message;
 
-        public override string ToString()
+        public sealed override string ToString()
         {
-            var name = GetType().Name.ToUpper();
-            var args = Args.Select(p => p.GetValue(this)).Prepend(name);
+            var commandName = GetType().Name;
+            if (commandName.EndsWith("Command"))
+                commandName = commandName.Substring(0, commandName.Length - 7); //"Command".Length
+
+            var commandParams = GetParamGetters(commandName).Select(get => get(this));
+            var parts = commandParams.Prepend(commandName.ToUpper());
             if (!string.IsNullOrWhiteSpace(Message))
-                args = args.Append(Message);
-            return args.StrJoin(" ");
+                parts = parts.Append(Message);
+            return parts.StrJoin(" ");
+        }
+
+        private Func<object, object>[] GetParamGetters(string commandName)
+        {
+            if (ParamGetters.TryGetValue(commandName, out var getters))
+                return getters;
+            return ParamGetters[commandName] = 
+                GetType()
+                .GetConstructors().Single().GetParameters()
+                .Select(ParamGetter)
+                .Where(g => g != null)
+                .ToArray();
         }
     }
 }

@@ -51,7 +51,8 @@ namespace bot
                 foreach (var solution in improvements)
                 {
                     improvementsCount++;
-                    solution.DebugInfo = new SolutionDebugInfo(countdown, mutationsCount, improvementsCount, ShortName);
+                    solution.DebugInfo = new SolutionDebugInfo(countdown, mutationsCount, 
+                        improvementsCount, ShortName);
                     steps.Add(solution);
                 }
             }

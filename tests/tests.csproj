@@ -1,13 +1,10 @@
 	<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-
+    <TargetFramework>net6.0</TargetFramework>
     <IsPackable>false</IsPackable>
-
     <RootNamespace>bot</RootNamespace>
-
-    <LangVersion>8</LangVersion>
+    <LangVersion>10</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

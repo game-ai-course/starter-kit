@@ -10,20 +10,16 @@ using TextCopy;
 internal static class Builder
 {
     [STAThread]
-    private static void Main(string[] args)
+    private static void Main()
     {
-        var dirs = args.Length > 0 ? args : new[] {@"."};
+        var root = Path.GetDirectoryName(FileHelper.PatchDirectoryName("lib"))!;
+        var dirs = new[] {Path.Combine(root, "lib"), Path.Combine(root, "bot") };
+        Console.WriteLine(string.Join(", ", dirs));
 
         var ignoredPatterns = new[]
         {
-            @"tests?\.cs",
-            @"_tests?\.cs",
-            @"_should.cs",
-            @"_should.solution.cs",
-            @"bin\\",
-            @"obj\\",
-            "Builder.cs",
-            @".*/tests.*"
+            @"bin\" + Path.DirectorySeparatorChar,
+            @"obj\" + Path.DirectorySeparatorChar,
         };
         var sources =
             dirs.SelectMany(

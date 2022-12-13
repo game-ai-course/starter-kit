@@ -27,7 +27,6 @@ namespace bot
             var solver = new Solver();
             var move = solver.GetCommand(state, int.MaxValue);
             Console.WriteLine(move);
-
         }
     }
 }

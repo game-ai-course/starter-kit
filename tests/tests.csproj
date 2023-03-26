@@ -14,5 +14,12 @@
     <ProjectReference Include="../bot/bot.csproj" />
     <ProjectReference Include="../lib/lib.csproj" />
   </ItemGroup>
+    
+  <ItemGroup>
+    <None Include="test-data\*">
+      <Link>%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
 </Project>

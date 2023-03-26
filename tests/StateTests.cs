@@ -24,9 +24,10 @@ namespace bot
             var state = reader.ReadState();
             Console.WriteLine(state);
 
-            var solver = new Solver();
-            var move = solver.GetCommand(state, int.MaxValue);
-            Console.WriteLine(move);
+            var solver = new CrystalSolver(new StateInit());
+            var moves = solver.GetCommands(state, int.MaxValue);
+            foreach (var move in moves)
+                Console.WriteLine(move);
         }
     }
 }

@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <PublishSingleFile>true</PublishSingleFile>
+        <TargetFramework>net6.0</TargetFramework>
+        <SelfContained>true</SelfContained>
+        <OutDir>.</OutDir>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Remove="*"/>
+        <Compile Include="build.cs"/>
+    </ItemGroup>
+</Project>

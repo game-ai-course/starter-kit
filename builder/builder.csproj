@@ -1,12 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>10</LangVersion>
-    <OutputPath>bin</OutputPath>
-    <Configurations>Debug;Release</Configurations>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="TextCopy" Version="6.1.0" />
-  </ItemGroup>
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <LangVersion>12</LangVersion>
+        <OutputPath>bin</OutputPath>
+        <Configurations>Debug;Release</Configurations>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="GitInfo" Version="3.3.3">
+          <PrivateAssets>all</PrivateAssets>
+          <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.0-2.final"/>
+        <PackageReference Include="TextCopy" Version="6.1.0"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="bot.csproj">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>

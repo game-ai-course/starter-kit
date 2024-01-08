@@ -1,10 +1,9 @@
-﻿namespace bot
-{
-    public class StateInit
-    {
-    }
+﻿namespace bot;
 
-    public class State
-    {
-    }
+public class StateInit
+{
+}
+
+public class State
+{
 }

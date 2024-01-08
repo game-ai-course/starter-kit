@@ -1,113 +1,108 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
+namespace bot;
 
-namespace bot
+public class MaxHeap<T> where T : IComparable<T>
 {
-    public class MaxHeap<T> where T : IComparable<T>
+    private readonly List<T> values;
+
+    public MaxHeap()
     {
-        private readonly List<T> values;
+        values = new List<T> { default };
+    }
 
-        public MaxHeap()
+    public int Count => values.Count - 1;
+    public T Max => values[1];
+
+    public override string ToString()
+    {
+        var max = values.Count > 1 ? Max.ToString() : "NA";
+        return $"Count = {values.Count} Max = {max}";
+    }
+
+    public bool TryDequeue(out T max)
+    {
+        var count = Count;
+        if (count == 0)
         {
-            values = new List<T> { default };
+            max = default;
+            return false;
         }
 
-        public int Count => values.Count - 1;
-        public T Max => values[1];
+        max = Max;
+        values[1] = values[count];
+        values.RemoveAt(count);
 
-        public override string ToString()
+        if (values.Count > 1)
         {
-            var max = values.Count > 1 ? Max.ToString() : "NA";
-            return $"Count = {values.Count} Max = {max}";
+            BubbleDown(1);
         }
 
-        public bool TryDequeue(out T max)
+        return true;
+    }
+
+    public void Add(T item)
+    {
+        values.Add(item);
+        BubbleUp(Count);
+    }
+
+    private void BubbleUp(int index)
+    {
+        int parent = index / 2;
+
+        while (index > 1 && CompareResult(parent, index) < 0)
         {
-            var count = Count;
-            if (count == 0)
+            Exchange(index, parent);
+            index = parent;
+            parent /= 2;
+        }
+    }
+
+    private void BubbleDown(int index)
+    {
+        int max;
+
+        while (true)
+        {
+            int left = index * 2;
+            int right = index * 2 + 1;
+
+            if (left < values.Count &&
+                CompareResult(left, index) > 0)
             {
-                max = default;
-                return false;
+                max = left;
+            }
+            else
+            {
+                max = index;
             }
 
-            max = Max;
-            values[1] = values[count];
-            values.RemoveAt(count);
-
-            if (values.Count > 1)
+            if (right < values.Count &&
+                CompareResult(right, max) > 0)
             {
-                BubbleDown(1);
+                max = right;
             }
 
-            return true;
-        }
-
-        public void Add(T item)
-        {
-            values.Add(item);
-            BubbleUp(Count);
-        }
-
-        private void BubbleUp(int index)
-        {
-            int parent = index / 2;
-
-            while (index > 1 && CompareResult(parent, index) < 0)
+            if (max != index)
             {
-                Exchange(index, parent);
-                index = parent;
-                parent /= 2;
+                Exchange(index, max);
+                index = max;
+            }
+            else
+            {
+                return;
             }
         }
+    }
 
-        private void BubbleDown(int index)
-        {
-            int max;
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private int CompareResult(int index1, int index2)
+    {
+        return values[index1].CompareTo(values[index2]);
+    }
 
-            while (true)
-            {
-                int left = index * 2;
-                int right = index * 2 + 1;
-
-                if (left < values.Count &&
-                    CompareResult(left, index) > 0)
-                {
-                    max = left;
-                }
-                else
-                {
-                    max = index;
-                }
-
-                if (right < values.Count &&
-                    CompareResult(right, max) > 0)
-                {
-                    max = right;
-                }
-
-                if (max != index)
-                {
-                    Exchange(index, max);
-                    index = max;
-                }
-                else
-                {
-                    return;
-                }
-            }
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private int CompareResult(int index1, int index2)
-        {
-            return values[index1].CompareTo(values[index2]);
-        }
-
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void Exchange(int index1, int index2)
-        {
-            (values[index1], values[index2]) = (values[index2], values[index1]);
-        }
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void Exchange(int index1, int index2)
+    {
+        (values[index1], values[index2]) = (values[index2], values[index1]);
     }
 }

@@ -1,7 +1,6 @@
-namespace bot
+namespace bot;
+
+public interface IEstimator<in TState>
 {
-    public interface IEstimator<in TState>
-    {
-        double GetScore(TState state);
-    }
+    double GetScore(TState state);
 }

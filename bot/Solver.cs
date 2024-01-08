@@ -1,10 +1,9 @@
-﻿namespace bot
+﻿namespace bot;
+
+public class Solver
 {
-    public class Solver
+    public BotCommand GetCommand(State state, Countdown countdown)
     {
-        public BotCommand GetCommand(State state, Countdown countdown)
-        {
-            return new Move(V.Zero) { Message = "Nothing to do..." };
-        }
+        return new Move(V.Zero) { Message = "Nothing to do..." };
     }
-}   
+}
